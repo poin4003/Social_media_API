@@ -4,16 +4,24 @@ const express = require('express');
 // Import controller
 const postController = require('../../controllers/post.controller');
 
+// Import helper
+const { validateBody, validateParam, schemas } = require('../../helper/validator')
+
 // Setup Router
 const router = express.Router();
 
 router.route('/')
   .get(postController.getPosts)
-  .post(postController.createPost)
+  .post(validateBody(schemas.postSchema), 
+    postController.createPost)
   
 router.route('/:postId')
-  .get(postController.getPostDetail)
-  .put(postController.updatePost)
-  .delete(postController.deletePost)
+  .get(validateParam(schemas.idSchema, 'postId'),
+    postController.getPostDetail)
+  .put(validateParam(schemas.idSchema, 'postId'),
+    validateBody(schemas.postOptionalSchema), 
+    postController.updatePost)
+  .delete(validateParam(schemas.idSchema, 'postId'),
+    postController.deletePost)
 
 module.exports = router;

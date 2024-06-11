@@ -1,10 +1,9 @@
-// Import models
-const postModel = require('../models/post.model');
+// Import services
+const PostService = require('../services/post.service');
 
 // Create post 
 const createPost = async (req, res) => {
-  const newPost = new postModel(req.body);
-  await newPost.save();
+  const newPost = await PostService.createPost(req.body);
 
   return res.status(201).json({
     message: "Success: created post!",
@@ -15,7 +14,11 @@ const createPost = async (req, res) => {
 // Get all posts
 const getPosts = async (req, res, next) => {
   try {
-    const posts = await postModel.find();
+    const posts = await PostService.getPosts();
+
+    if (posts.length === 0) return res.status(404).json({
+      message: "Error: can not find posts!"
+    })
 
     return res.status(200).json({
       message: "Success: posts found!",
@@ -31,7 +34,11 @@ const getPostDetail = async (req, res, next) => {
   const { postId } = req.params;
 
   try {
-    const post = await postModel.findById(postId);
+    const post = await PostService.getPostDetail(postId);
+
+    if (post === null) return res.status(404).json({
+      message: "Error: can not find post!"
+    })
 
     return res.status(200).json({
       message: "Success: post found!",
@@ -47,7 +54,11 @@ const updatePost = async (req, res, next) => {
   const { postId } = req.params;
 
   try {
-    await postModel.findByIdAndUpdate(postId, req.body);
+    const post = await PostService.updatePost(postId, req.body);
+
+    if (post === null) return res.status(404).json({
+      message: "Error: can not find post!"
+    })
 
     return res.status(200).json({
       message: "Success: udpated post!"
@@ -62,7 +73,11 @@ const deletePost = async (req, res, next) => {
   const { postId } = req.params;
 
   try {
-    await postModel.findByIdAndDelete(postId);
+    const post = await PostService.deletePost(postId);
+
+    if (post === null) return res.status(404).json({
+      message: "Error: can not find post!"
+    })
 
     return res.status(200).json({
       message: "Success: deleted post!"
