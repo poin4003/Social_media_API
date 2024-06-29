@@ -18,8 +18,12 @@ const UserController = {
       const users = await UserServices.getUsers();
 
       if (users.length === 0) return res.status(404).json({
-        message: "Error: can not find users!"
-      })
+        data: [],
+        error: {
+          code: 404,
+          message: "Can not found users!"
+        } 
+      });
 
       return res.status(200).json({
         message: "Success: users found!",
@@ -38,13 +42,17 @@ const UserController = {
       const user = await UserServices.getUserDetail(userId);
 
       if (user === null) return res.status(404).json({
-        message: "Error: can not find user!"
-      })
+        data: null,
+        error: {
+          code: 404,
+          message: "Can not found user!"
+        }
+      });
 
       return res.status(200).json({
         message: "Success: user found!",
         data: user
-      })
+      });
     } catch (error) {
       next(error);
     }
@@ -58,12 +66,17 @@ const UserController = {
       const user = await UserServices.updateUser(userId, req.body);
 
       if (user === null) return res.status(404).json({
-        message: "Error: can not find users!"
-      })
+        data: null,
+        error: {
+          code: 404,
+          message: "Can not found user!"
+        }        
+      });
 
       return res.status(200).json({
-        message: "Success: updated user!"
-      })
+        message: "Success: updated user!",
+        data: user
+      });
     } catch (error) {
       next(error);
     }
@@ -77,12 +90,17 @@ const UserController = {
       const user = await UserServices.deleteUser(userId);
       
       if (user === null) return res.status(404).json({
-        message: "Error: can not find users!"
-      })
+        data: null,
+        error: {
+          code: 404,
+          message: "Can not found user!"
+        }
+      });
 
       return res.status(200).json({
-        message: "Success: deleted user!"
-      })
+        message: "Success: deleted user!",
+        data: user
+      });
     } catch (error) {
       next(error);
     }

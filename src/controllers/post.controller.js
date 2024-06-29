@@ -2,13 +2,17 @@
 const PostService = require('../services/post.service');
 
 // Create post 
-const createPost = async (req, res) => {
-  const newPost = await PostService.createPost(req.body);
+const createPost = async (req, res, next) => {
+  try {
+    const newPost = await PostService.createPost(req.body);
 
-  return res.status(201).json({
-    message: "Success: created post!",
-    data: newPost
-  });
+    return res.status(201).json({
+      message: "Success: created post!",
+      data: newPost
+    });
+  } catch (error) {
+    next(error);
+  }
 }
 
 // Get all posts
@@ -17,13 +21,17 @@ const getPosts = async (req, res, next) => {
     const posts = await PostService.getPosts();
 
     if (posts.length === 0) return res.status(404).json({
-      message: "Error: can not find posts!"
-    })
+      data: [],
+      error: {
+        code: 404,
+        message: "Can not found posts!"
+      }
+    });
 
     return res.status(200).json({
       message: "Success: posts found!",
       data: posts
-    })
+    });
   } catch (error) {
     next(error);
   }
@@ -37,7 +45,11 @@ const getPostDetail = async (req, res, next) => {
     const post = await PostService.getPostDetail(postId);
 
     if (post === null) return res.status(404).json({
-      message: "Error: can not find post!"
+      data: null,
+      error: {
+        code: 404,
+        message: "Can not found post!"
+      }
     })
 
     return res.status(200).json({
@@ -56,12 +68,9 @@ const updatePost = async (req, res, next) => {
   try {
     const post = await PostService.updatePost(postId, req.body);
 
-    if (post === null) return res.status(404).json({
-      message: "Error: can not find post!"
-    })
-
     return res.status(200).json({
-      message: "Success: udpated post!"
+      message: "Success: udpated post!",
+      data: post
     })
   } catch (error) {
     next(error);
@@ -75,12 +84,9 @@ const deletePost = async (req, res, next) => {
   try {
     const post = await PostService.deletePost(postId);
 
-    if (post === null) return res.status(404).json({
-      message: "Error: can not find post!"
-    })
-
     return res.status(200).json({
-      message: "Success: deleted post!"
+      message: "Success: deleted post!",
+      data: post
     })
   } catch (error) {
     next(error);

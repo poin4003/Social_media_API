@@ -77,8 +77,7 @@ const schemas = {
   postOptionalSchema: Joi.object().keys({
     title: Joi.string().min(2),
     content: Joi.string(),
-    createdOn: Joi.string(),
-    userId: Joi.string().regex(/^[0-9a-fA-F]{24}$/)
+    createdOn: Joi.string()
   })
 }
 

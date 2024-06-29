@@ -33,7 +33,7 @@ const UserServices = {
 
   updateUser: async (userId, body) => {
     try {
-      const user = await userModel.findByIdAndUpdate(userId, body);
+      const user = await userModel.findByIdAndUpdate(userId, body, { new: true });
       return user;
     } catch (error) {
       throw(error);

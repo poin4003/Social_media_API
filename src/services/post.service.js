@@ -7,6 +7,13 @@ const PostService = {
     try {
       const newPost = new postModel(body);
       const foundUser = await userModel.findById(newPost.userId);
+      
+      if (!foundUser) {
+        const error = new Error("Can not found user!");
+        error.status = 404;
+        throw error;
+      }
+      
       foundUser.posts.push(newPost._id);
       await foundUser.save();
       await newPost.save();
@@ -36,7 +43,14 @@ const PostService = {
 
   updatePost: async (postId, body) => {
     try {
-      const post = await postModel.findByIdAndUpdate(postId, body);
+      const post = await postModel.findByIdAndUpdate(postId, body, { new: true });
+
+      if (!post) {
+        const error = new Error("Can not found post!");
+        error.status = 404;
+        throw error;
+      }
+
       return post;
     } catch (error) {
       throw error;
@@ -46,6 +60,18 @@ const PostService = {
   deletePost: async (postId) => {
     try {
       const post = await postModel.findByIdAndDelete(postId);
+
+      if (!post) {
+        const error = new Error("Can not found post!");
+        error.status = 404;
+        throw error;
+      }
+
+      await userModel.updateOne(
+        { _id: post.userId },
+        { $pull: { posts: postId } }
+      );
+
       return post;
     } catch (error) {
       throw error;
