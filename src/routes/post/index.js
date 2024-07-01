@@ -5,6 +5,55 @@ const { validateBody, validateParam, schemas } = require('../../helper/validator
 
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     Post:
+ *       type: object
+ *       required:
+ *         - title
+ *         - content
+ *         - userId
+ *         - category
+ *       properties:
+ *         id:
+ *           type: string
+ *           format: objectid
+ *           description: The auto-generated id of the post
+ *         title:
+ *           type: string
+ *           description: The title of the post
+ *         content:
+ *           type: string
+ *           description: The content of the post
+ *         userId:
+ *           type: string
+ *           format: objectid
+ *           description: The ID of the user who created the blog post
+ *         category:
+ *           type: string
+ *           enum:
+ *             - Technology
+ *             - Travel
+ *             - Food
+ *             - Fashion
+ *             - Health
+ *           description: The category of the post
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: The date and time when the blog post was created
+ *           example: 2024-06-28T14:20:00Z
+ *       example:
+ *         _id: 60d0fe4f5311236168a109ca
+ *         title: Introduction to Swagger
+ *         content: This is a blog post about how to use Swagger in your project.
+ *         category: Technology
+ *         userId: 60d0fe4f5311236168a109cb
+ *         createdAt: 2024-06-28T14:20:00Z
+ */
+
+/**
+ * @swagger
  * /api/v1/post:
  *   get:
  *     summary: Retrieves a list of posts

@@ -4,7 +4,7 @@ require('dotenv').config();
 const express = require('express');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
-const swagger = require('./helper/swagger');
+const swagger = require('./swagger');
 
 // Setup library
 const app = express();
