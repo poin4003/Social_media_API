@@ -4,22 +4,23 @@ require('dotenv').config();
 const express = require('express');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
-
-const swagger = require('../swagger');
+const swagger = require('./helper/swagger');
 
 // Setup library
 const app = express();
+
+// Setup Middleware
 app.use(logger('dev'));
 app.use(bodyParser.json());
-
-// Connect database setup
-require('./dbs/mongo');
 
 // Swagger setup
 swagger(app);
 
 // Router setup
-app.use(require('./routers'));
+app.use(require('./routes'));
+
+// Connect database setup
+require('./dbs/mongo');
 
 // Error handler function
 app.use((err, req, res, next) => {
@@ -32,6 +33,5 @@ app.use((err, req, res, next) => {
     }
   });
 });
-
 
 module.exports = app;
