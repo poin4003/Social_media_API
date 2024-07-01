@@ -1,6 +1,6 @@
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
-const path = require('path');
+
 // Swagger definition
 const swaggerDefinition = {
   openapi: '3.0.0',
@@ -20,7 +20,7 @@ const swaggerDefinition = {
 // Options for the swagger docs
 const options = {
   swaggerDefinition,
-  apis: ['./routes/post/*.js','./routes/user/*.js', './routes/*.js']
+  apis: ['./src/routes/post/*.js','./src/routes/user/*.js', './src/routes/*.js']
 };
 
 // Initialize swagger-jsdoc
