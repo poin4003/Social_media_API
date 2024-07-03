@@ -5,6 +5,52 @@ const { validateBody, validateParam, schemas } = require('../../helper/validator
 
 /**
  * @swagger
+ * tags:
+ *   name: Users
+ *   description: User management
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       required:
+ *         - name
+ *         - email
+ *         - password
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: The auto-generated id of the user
+ *         name:
+ *           type: string
+ *           description: The name of the user
+ *         email:
+ *           type: string
+ *           description: The email of the user
+ *         password:
+ *           type: string
+ *           description: The password of the user
+ *         role:
+ *           type: number
+ *           description: The role of the user
+ *         posts:
+ *           type: array
+ *           items:
+ *             type: string
+ *       example:
+ *         id: d5fE_asz
+ *         name: Nguyễn Lê Anh Huy
+ *         email: pchuy4003@gmail.com
+ *         password: 123456
+ *         role: 1
+ *         posts: []
+ */
+
+/**
+ * @swagger
  * /api/v1/user:
  *   get:
  *     summary: Retrieves a list of users
@@ -17,14 +63,7 @@ const { validateBody, validateParam, schemas } = require('../../helper/validator
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                   name:
- *                     type: string
- *                   age:
- *                     type: integer
+ *                 $ref: '#/components/schemas/User'
  */
 router.get('/', UserController.getUsers);
 
@@ -39,18 +78,14 @@ router.get('/', UserController.getUsers);
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - name
- *               - age
- *             properties:
- *               name:
- *                 type: string
- *               age:
- *                 type: integer
+ *             $ref: '#/components/schemas/User'
  *     responses:
  *       201:
  *         description: User created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
  *       400:
  *         description: Bad Request
  */
@@ -75,14 +110,7 @@ router.post('/', validateBody(schemas.userSchema), UserController.createUser);
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: integer
- *                 name:
- *                   type: string
- *                 age:
- *                   type: integer
+ *               $ref: '#/components/schemas/User'
  *       404:
  *         description: User not found
  */
@@ -106,15 +134,14 @@ router.get('/:userId', validateParam(schemas.idSchema, 'userId'), UserController
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *               age:
- *                 type: integer
+ *             $ref: '#/components/schemas/User'
  *     responses:
  *       200:
  *         description: User updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
  *       400:
  *         description: Bad Request
  *       404:

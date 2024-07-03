@@ -3,7 +3,63 @@ const router = express.Router();
 const postController = require("../../controllers/post.controller");
 const { validateBody, validateParam, schemas } = require('../../helper/validator');
 
+/**
+ * @swagger
+ * tags:
+ *   name: Posts
+ *   description: Post management
+ */
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     NewPost:
+ *       type: object
+ *       required:
+ *         - title
+ *         - content
+ *         - createdOn
+ *         - userId
+ *       properties:
+ *         title:
+ *           type: string
+ *           description: The title of the post
+ *         content:
+ *           type: string
+ *           description: The content of the post
+ *         createdOn:
+ *           type: string
+ *           description: The date the post was created
+ *         userId:
+ *           type: string
+ *           description: The user id associated with the post
+ *       example:
+ *         title: A sample post
+ *         content: This is the content of the post
+ *         createdOn: 2023-07-03
+ *         userId: 60d0fe4f5311236168a109ca
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Post:
+ *       allOf:
+ *         - $ref: '#/components/schemas/NewPost'
+ *         - type: object
+ *           properties:
+ *             id:
+ *               type: string
+ *               description: The auto-generated id of the post
+ *           example:
+ *             id: d5fE_asz
+ *             title: A sample post
+ *             content: This is the content of the post
+ *             createdOn: 2023-07-03
+ *             userId: 60d0fe4f5311236168a109ca
+ */
 
 /**
  * @swagger
@@ -19,14 +75,7 @@ const { validateBody, validateParam, schemas } = require('../../helper/validator
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                   title:
- *                     type: string
- *                   content:
- *                     type: string
+ *                 $ref: '#/components/schemas/Post'
  */
 router.get("/", postController.getPosts);
 
@@ -41,15 +90,16 @@ router.get("/", postController.getPosts);
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *               content:
- *                 type: string
+ *             $ref: '#/components/schemas/NewPost'
  *     responses:
  *       201:
  *         description: Post created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Post'
+ *       400:
+ *         description: Bad Request
  */
 router.post("/", validateBody(schemas.postSchema), postController.createPost);
 
@@ -72,14 +122,9 @@ router.post("/", validateBody(schemas.postSchema), postController.createPost);
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: integer
- *                 title:
- *                   type: string
- *                 content:
- *                   type: string
+ *               $ref: '#/components/schemas/Post'
+ *       404:
+ *         description: Post not found
  */
 router.get("/:postId", validateParam(schemas.idSchema, 'postId'), postController.getPostDetail);
 
@@ -101,15 +146,18 @@ router.get("/:postId", validateParam(schemas.idSchema, 'postId'), postController
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *               content:
- *                 type: string
+ *             $ref: '#/components/schemas/Post'
  *     responses:
  *       200:
  *         description: Post updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Post'
+ *       400:
+ *         description: Bad Request
+ *       404:
+ *         description: Post not found
  */
 router.put("/:postId", validateParam(schemas.idSchema, 'postId'), validateBody(schemas.postOptionalSchema), postController.updatePost);
 
@@ -127,8 +175,10 @@ router.put("/:postId", validateParam(schemas.idSchema, 'postId'), validateBody(s
  *         required: true
  *         description: The post ID
  *     responses:
- *       200:
+ *       204:
  *         description: Post deleted successfully
+ *       404:
+ *         description: Post not found
  */
 router.delete("/:postId", validateParam(schemas.idSchema, 'postId'), postController.deletePost);
 
