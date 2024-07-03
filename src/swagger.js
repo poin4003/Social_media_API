@@ -1,3 +1,5 @@
+const cors = require('cors'); // Thêm dòng này để import cors
+
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 
@@ -20,7 +22,7 @@ const swaggerDefinition = {
 // Options for the swagger docs
 const options = {
   swaggerDefinition,
-  apis: ['./src/routes/post/*.js','./src/routes/user/*.js', './src/routes/*.js']
+  apis: ['./src/routes/post/*.js', './src/routes/user/*.js', './src/routes/*.js'],
 };
 
 // Initialize swagger-jsdoc
