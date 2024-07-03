@@ -14,7 +14,7 @@ const app = express();
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(cors({
-  origin: '*',
+  origin: process.env.CLIENT_ENDPOINT,
   methods: "GET,POST,PUT,DELETE,PATCH",
   credentials: true
 }))
