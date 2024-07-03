@@ -27,5 +27,12 @@ const options = {
 const swaggerSpec = swaggerJSDoc(options);
 
 module.exports = (app) => {
+  // Enable CORS for Swagger UI route
+  app.use('/api-docs', cors({
+    origin: '*',
+    methods: "GET,POST,PUT,DELETE,PATCH",
+    credentials: true
+  }));
+  
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 };
