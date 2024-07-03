@@ -4,6 +4,7 @@ require('dotenv').config();
 const express = require('express');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const swagger = require('./swagger');
 
 // Setup library
@@ -12,6 +13,11 @@ const app = express();
 // Setup Middleware
 app.use(logger('dev'));
 app.use(bodyParser.json());
+app.use(cors({
+  origin: '*',
+  methods: "GET,POST,PUT,DELETE,PATCH",
+  credentials: true
+}))
 
 // Swagger setup
 swagger(app);
