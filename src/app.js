@@ -13,11 +13,13 @@ const app = express();
 // Setup Middleware
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(cors({
-  origin: process.env.CLIENT_ENDPOINT,
-  methods: "GET,POST,PUT,DELETE,PATCH",
-  credentials: true
-}))
+
+var corsOptionsDelegate = function (req, callback) {
+  var corsOptions = { origin: true };
+  callback(null, corsOptions);
+};
+
+app.use(cors(corsOptionsDelegate));
 
 // Swagger setup
 swagger(app);

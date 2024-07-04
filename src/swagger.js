@@ -1,3 +1,4 @@
+const { description } = require('@hapi/joi/lib/base');
 const cors = require('cors'); // Thêm dòng này để import cors
 
 const swaggerJSDoc = require('swagger-jsdoc');
@@ -12,6 +13,10 @@ const swaggerDefinition = {
     description: 'CRUD API Social Media application documented with Swagger',
   },
   servers: [
+    {
+      url: process.env.CLIENT_ENDPOINT,
+      description: 'Production server'
+    },
     {
       url: 'http://localhost:8080',
       description: 'Development server',
@@ -29,12 +34,5 @@ const options = {
 const swaggerSpec = swaggerJSDoc(options);
 
 module.exports = (app) => {
-  // Enable CORS for Swagger UI route
-  app.use('/api-docs', cors({
-    origin: process.env.CLIENT_ENDPOINT,
-    methods: "GET,POST,PUT,DELETE,PATCH",
-    credentials: true
-  }));
-  
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 };
